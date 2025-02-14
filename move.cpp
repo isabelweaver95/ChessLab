@@ -2,17 +2,17 @@
  * Source File:
  *    MOVE
  * Author:
- *    <your name here>
+ *    Nathan Bird, Jared Davey, Brock Hoskins
  * Summary:
  *    Everything we need to know about a single chess move
  ************************************************************************/
 
 #include "move.h"
 #include "pieceType.h"
-#include <cassert>
-#include <iostream>
-#include <sstream>
-#include <bitset>
+#include "position.h"
+#include <cctype>
+#include <set>
+#include <string>
 
 using namespace std;
 
@@ -23,7 +23,7 @@ Move::Move() : promote(PieceType::INVALID), capture(PieceType::INVALID), moveTyp
 {
 }
 
-Move::Move(const Position& source, const Position dest, PieceType promote, PieceType capture, MoveType moveType, bool isWhite)
+Move::Move(const Position& source, const Position& dest, PieceType promote, PieceType capture, MoveType moveType, bool isWhite)
 {
    this->source = source;
    this->dest = dest;
@@ -32,6 +32,31 @@ Move::Move(const Position& source, const Position dest, PieceType promote, Piece
    this->moveType = moveType;
    this->isWhite = isWhite;
    this->text = getText();
+}
+
+Move::Move(const Position& source, const Position& dest, const set<Move>& possible)
+{
+   bool matched = false;
+   for (const Move& move : possible)
+   {
+      if (move.getSource() == source && move.getDest() == dest)
+      {
+         this->source = source;
+         this->dest = dest;
+         this->isWhite = move.getIsWhite();
+         this->promote = move.getPromote();
+         this->capture = move.getCatpure();
+         this->moveType = move.getMoveType();
+         this->text = move.getText();
+         matched = true;
+      }
+   }
+
+   if (!matched)
+   {
+      Move();
+   }
+
 }
 
 Move::Move(const char* text, const bool& isWhite)
@@ -76,24 +101,22 @@ bool Move::operator!=(const Move& rhs) const
 
 char Move::letterFromPieceType(PieceType pt) const
 {
-    switch (pt)
-    {
-        case PieceType::SPACE:
-            return ' ';
-        case PieceType::PAWN:
-            return 'p';
-        case PieceType::BISHOP:
-            return 'b';
-        case PieceType::KNIGHT:
-            return 'n';
-        case PieceType::ROOK:
-            return 'r';
-        case PieceType::QUEEN:
-            return 'q';
-        case PieceType::KING:
-            return 'k';
-//        case PieceType::INVALID:
-//            return default;
+   switch (pt)
+   {
+   case PieceType::SPACE:
+      return '\0';
+   case PieceType::PAWN:
+      return 'p';
+   case PieceType::BISHOP:
+      return 'b';
+   case PieceType::KNIGHT:
+      return 'n';
+   case PieceType::ROOK:
+      return 'r';
+   case PieceType::QUEEN:
+      return 'q';
+   case PieceType::KING:
+      return 'k';
    }
 
    return -1;
@@ -104,16 +127,22 @@ PieceType Move::pieceTypeFromLetter(char letter) const
    switch (letter)
    {
    case 'p':
+   case 'P':
       return PieceType::PAWN;
    case 'b':
+   case 'B':
       return PieceType::BISHOP;
    case 'n':
+   case 'N':
       return PieceType::KNIGHT;
    case 'r':
+   case 'R':
       return PieceType::ROOK;
    case 'q':
+   case 'Q':
       return PieceType::QUEEN;
    case 'k':
+   case 'K':
       return PieceType::KING;
    }
 
@@ -153,8 +182,12 @@ void Move::read(const string& text)
       }
       else
       {
-         // if (character == 'Q')
-         //    moveType = MoveType::PROMOTION;
+         if (character == 'Q')
+         {
+            moveType = MoveType::MOVE;
+            promote = PieceType::QUEEN;
+         }
+           
          if (character == 'E')
             moveType = MoveType::ENPASSANT;
          if (character == 'C')
@@ -181,6 +214,10 @@ string Move::getText() const
    if (moveType == MoveType::ENPASSANT)
       returnText += 'E';
 
+   // Promoted?
+   if (promote != PieceType::INVALID)
+      returnText += toupper(letterFromPieceType(promote));
+
    // Castled?
    if (moveType == MoveType::CASTLE_KING)
       returnText += 'c';
@@ -189,3 +226,6 @@ string Move::getText() const
 
    return returnText;
 }
+
+
+

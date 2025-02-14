@@ -1,20 +1,26 @@
 /***********************************************************************
  * Header File:
- *    ROOK
+ *    Rook
  * Author:
-*    <your name here>
+*    Nathan Bird, Brock Hoskins, Jared Davey
  * Summary:
- *    The KNIGHT class
+ *    The Rook class
  ************************************************************************/
 
 #pragma once
 
+#include "board.h"
+#include "move.h"
 #include "piece.h"
+#include "pieceType.h"
+#include "position.h"
+#include "uiDraw.h"
+#include <set>
 
- /***************************************************
-  * KNIGHT
-  * The knight, aka the "Horse"
-  ***************************************************/
+/***************************************************
+ * Rook
+ * The Rook
+ ***************************************************/
 class Rook : public Piece
 {
 public:
@@ -22,6 +28,6 @@ public:
    Rook(int c, int r, bool isWhite) : Piece(c, r, isWhite) { }
    ~Rook() { }
    PieceType getType() const { return ROOK; }
-   void getMoves(set <Move>& moves, const Board& board) const override;
+   void getMoves(set <Move>& possible, const Board& board) const override;
    void display(ogstream* pgout) const override;
 };

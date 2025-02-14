@@ -2,7 +2,7 @@
  * Source File:
  *    PAWN
  * Author:
- *    Savanna & Isabel
+ *    Nathan Bird, Brock Hoskins, Jared Davey
  * Summary:
  *    The Pawn class
  ************************************************************************/
@@ -18,7 +18,7 @@
  /**********************************************
   * PAWN : GET POSITIONS
   *********************************************/
-void Pawn::getMoves(set<Move>& moves, const Board& board) const
+void Pawn::getMoves(set<Move>& possible, const Board& board) const
 {
    int row = position.getRow();
    int col = position.getCol();
@@ -31,61 +31,65 @@ void Pawn::getMoves(set<Move>& moves, const Board& board) const
       r = row - 2;
       newPos.set(c, r);
       if (row == 6 && board[newPos].getType() == PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+         possible.insert(createNewMove(newPos, board));  // forward two blank spaces
       r = row - 1;
       newPos.set(c, r);
       if (r >= 1 && board[newPos].getType() == PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+         possible.insert(createNewMove(newPos, board));  // forward one black space
       c = col - 1;
       newPos.set(c, r);
-      if (r >= 1 && board[newPos].isWhite() && board[newPos].getType() != PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if (c >= 0 && board[newPos].isWhite() &&
+          board[newPos].getType() != PieceType::SPACE &&
+          r != 0)
+         possible.insert(createNewMove(newPos, board));  // attack left
       c = col + 1;
       newPos.set(c, r);
-      if (r >= 1 && board[newPos].isWhite() && board[newPos].getType() != PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
-
+      if (c < 8 && board[newPos].isWhite() &&
+          board[newPos].getType() != PieceType::SPACE &&
+          r != 0)
+         possible.insert(createNewMove(newPos, board));  // attack right
+      
       // Black En Passant
       c = col - 1;
       r = row;
       newPos.set(c, r);
-      if ((c >= 0) &&
-          (r == 3) &&
-          (board[newPos].getType() == PieceType::PAWN) &&
-          (board[newPos].isWhite() != fWhite) &&
-          (board[newPos].getLastMove() == board.getCurrentMove() - 1))
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if ((c >= 0) &&  // Valid column
+          (r == 3) &&  // Correct row for en passant
+          (board[newPos].getType() == PieceType::PAWN) &&  // Pawn to the left
+          (board[newPos].isWhite() != fWhite) &&           // Left pawn is opposite color
+          (board[newPos].getLastMove() == board.getCurrentMove()))  // Left pawn just moved
+         possible.insert(createNewEnPassantMove(Position(c, r - 1), board));
       c = col + 1;
       r = row;
       newPos.set(c, r);
-      if ((c <  8) &&
-          (r == 3) &&
-          (board[newPos].getType() == PieceType::PAWN) &&
-          (board[newPos].isWhite() != fWhite) &&
-          (board[newPos].getLastMove() == board.getCurrentMove() - 1))
-          moves.insert(Move(position, Position(c, r - 1), PieceType::INVALID, board[Position(c, r - 1)].getType(), Move::MoveType::ENPASSANT, isWhite()));
+      if ((c <  8) &&  // Valid column
+          (r == 3) &&  // Correct row for en passant
+          (board[newPos].getType() == PieceType::PAWN) &&  // Pawn to the right
+          (board[newPos].isWhite() != fWhite) &&           // Right pawn is opposite color
+          (board[newPos].getLastMove() == board.getCurrentMove()))  // Right pawn just moved
+         possible.insert(createNewEnPassantMove(Position(c, r - 1), board));
 
       // Black Promote
       c = col;
       r = row - 1;
       newPos.set(c, r);
-      if (r == 0 &&
-          board[newPos].getType() == PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::QUEEN, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if (r == 0 &&  // row 0 for black promote
+          board[newPos].getType() == PieceType::SPACE)  // In front of pawn has to be space.
+         possible.insert(createNewPromoteMove(newPos, board));
       c = col - 1;
       newPos.set(c, r);
-      if ((c >= 0) &&
-          (r == 0) &&
-          (board[newPos].isWhite() != fWhite) &&
-          (board[newPos].getType() != PieceType::SPACE))
-          moves.insert(Move(position, newPos, PieceType::QUEEN, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if ((c >= 0) &&  // valid col
+          (r == 0) &&  // row 0 for black promote
+          (board[newPos].isWhite() != fWhite) &&  // Opposite colors
+          (board[newPos].getType() != PieceType::SPACE))  // Only capture here
+         possible.insert(createNewPromoteMove(newPos, board));
       c = col + 1;
       newPos.set(c, r);
-      if ((c < 8) &&
-          (r == 0) &&
-          (board[newPos].isWhite() != fWhite) &&
-          (board[newPos].getType() != PieceType::SPACE))
-          moves.insert(Move(position, newPos, PieceType::QUEEN, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if ((c < 8) &&  // valid col
+          (r == 0) &&  // row 0 for black promote
+          (board[newPos].isWhite() != fWhite) &&  // Opposite colors
+          (board[newPos].getType() != PieceType::SPACE))  // Only capture here
+         possible.insert(createNewPromoteMove(newPos, board));
    }
    if (fWhite)
    {
@@ -93,61 +97,65 @@ void Pawn::getMoves(set<Move>& moves, const Board& board) const
       r = row + 2;
       newPos.set(c, r);
       if (row == 1 && board[newPos].getType() == PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+         possible.insert(createNewMove(newPos, board));  // forward two blank spaces
       r = row + 1;
       newPos.set(c, r);
       if (r < 7 && board[newPos].getType() == PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+         possible.insert(createNewMove(newPos, board));  // forward one blank space
       c = col - 1;
       newPos.set(c, r);
-      if (r < 7 && !board[newPos].isWhite() && board[newPos].getType() != PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if (c >= 0 && !board[newPos].isWhite() &&
+          board[newPos].getType() != PieceType::SPACE &&
+          r != 7)
+         possible.insert(createNewMove(newPos, board));  // attack left
       c = col + 1;
       newPos.set(c, r);
-      if (r < 7 && !board[newPos].isWhite() && board[newPos].getType() != PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
-
+      if (c < 8 && !board[newPos].isWhite() &&
+          board[newPos].getType() != PieceType::SPACE &&
+          r != 7)
+         possible.insert(createNewMove(newPos, board));  // attack right
+      
       // En Passant
       c = col - 1;
       r = row;
       newPos.set(c, r);
-      if ((c >= 0) &&
-          (r == 4) &&
-          (board[newPos].getType() == PieceType::PAWN) &&
-          (board[newPos].isWhite() != fWhite) &&
-          (board[newPos].getLastMove() == board.getCurrentMove() - 1))
-          moves.insert(Move(position, Position(c, r+1), PieceType::INVALID, board[Position(c, r+1)].getType(), Move::MoveType::ENPASSANT, isWhite()));
+      if ((c >= 0) &&  // Valid column
+          (r == 4) &&  // Correct row for en passant
+          (board[newPos].getType() == PieceType::PAWN) &&  // Pawn to the left
+          (board[newPos].isWhite() != fWhite) &&           // Left pawn is opposite color
+          (board[newPos].getLastMove() == board.getCurrentMove()))  // Left pawn just moved
+         possible.insert(createNewEnPassantMove(Position(c, r + 1), board));
       c = col + 1;
       r = row;
       newPos.set(c, r);
-      if ((c <  8) &&
-          (r == 4) &&
-          (board[newPos].getType() == PieceType::PAWN) &&
-          (board[newPos].isWhite() != fWhite) &&
-          (board[newPos].getLastMove() == board.getCurrentMove() - 1))
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if ((c <  8) &&  // Valid column
+          (r == 4) &&  // Correct row for en passant
+          (board[newPos].getType() == PieceType::PAWN) &&  // Pawn to the right
+          (board[newPos].isWhite() != fWhite) &&           // Right pawn is opposite color
+          (board[newPos].getLastMove() == board.getCurrentMove()))  // Right pawn just moved
+         possible.insert(createNewEnPassantMove(Position(c, r + 1), board));
 
       // White Promote
       c = col;
       r = row + 1;
       newPos.set(c, r);
-      if (r == 7 &&
-          board[newPos].getType() == PieceType::SPACE)
-          moves.insert(Move(position, newPos, PieceType::QUEEN, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if (r == 7 &&  // row 7 for white promote
+          board[newPos].getType() == PieceType::SPACE)  // In front of pawn has to be space.
+         possible.insert(createNewPromoteMove(newPos, board));
       c = col - 1;
       newPos.set(c, r);
-      if ((c >= 0) &&
-          (r == 7) &&
-          (board[newPos].isWhite() != fWhite) &&
-          (board[newPos].getType() != PieceType::SPACE))
-          moves.insert(Move(position, newPos, PieceType::QUEEN, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if ((c >= 0) &&  // valid col
+          (r == 7) &&  // row 7 for white promote
+          (board[newPos].isWhite() != fWhite) &&  // Opposite colors
+          (board[newPos].getType() != PieceType::SPACE))  // Only capture here
+         possible.insert(createNewPromoteMove(newPos, board));
       c = col + 1;
       newPos.set(c, r);
-      if ((c < 8) &&
-          (r == 7) &&
-          (board[newPos].isWhite() != fWhite) &&
-          (board[newPos].getType() != PieceType::SPACE))
-          moves.insert(Move(position, newPos, PieceType::QUEEN, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+      if ((c < 8) &&  // valid col
+          (r == 7) &&  // row 7 for white promote
+          (board[newPos].isWhite() != fWhite) &&  // Opposite colors
+          (board[newPos].getType() != PieceType::SPACE))  // Only capture here
+         possible.insert(createNewPromoteMove(newPos, board));
    }
 }
 
@@ -158,4 +166,14 @@ void Pawn::getMoves(set<Move>& moves, const Board& board) const
 void Pawn::display(ogstream* pgout) const
 {
    pgout->drawPawn(position, !fWhite);
+}
+
+Move Pawn::createNewEnPassantMove(const Position& newPos, const Board& board) const
+{
+   return Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::ENPASSANT, fWhite);
+}
+
+Move Pawn::createNewPromoteMove(const Position& newPos, const Board& board) const
+{
+   return Move(position, newPos, PieceType::QUEEN, board[newPos].getType(), Move::MoveType::MOVE, fWhite);
 }

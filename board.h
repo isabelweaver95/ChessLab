@@ -2,15 +2,16 @@
  * Header File:
  *    BOARD
  * Author:
- *    Isabel & Savanna
+ *    Nathan Bird, Jared Davey, Brock Hoskins
  * Summary:
  *    A collection of pieces and the state of the board
  ************************************************************************/
 
 #pragma once
 
-#include "move.h"
+#include "move.h"   // Because we return a set of Move
 #include <cassert>
+#include <set>
 
 class ogstream;
 class TestPawn;
@@ -48,7 +49,7 @@ public:
    // getters
    virtual int  getCurrentMove() const { return numMoves; }
    virtual bool whiteTurn()      const { return numMoves % 2 == 0; }
-   virtual void display(const Position& posHover, const Position& posSelect) const;
+   virtual void display(const Position& posHover, const Position& posSelect, const std::set<Move>& possible) const;
    virtual const Piece& operator [] (const Position& pos) const;
 
    // setters
@@ -124,3 +125,4 @@ public:
       return numMoves;
    }
 };
+

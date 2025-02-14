@@ -9,15 +9,15 @@
 
 
 #include "testPiece.h"
-#include "piece.h"
+#include "piece.h"     
 #include "board.h"
 #include "uiDraw.h"
-#include <cassert>
+#include <cassert>      
 
 
  /*************************************
   * ASSIGNMENT
-  * input: lhs.fWhite=false .lastMove=6 .nMoves=2
+  * input: lhs.fWhite=false .lastMove=6 .nMoves=2 
   *        rhs.fWhite=true  .lastMove=3 .nMoves=1
   * output:lhs.fWhite=true  .lastMove=3 .nMoves=1
   **************************************/
@@ -386,3 +386,4 @@ void TestPiece::setLastMove()
    assertUnit(piece.lastMove == 6);
    assertUnit(piece.nMoves == 3);
 }  // teardown
+

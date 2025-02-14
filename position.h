@@ -2,16 +2,17 @@
  * Header File:
  *    POSITION
  * Author:
- *    <your name here>
+ *    Nathan Bird, Jared Davey, Brock Hoskins
  * Summary:
  *    The position of a piece, the cursor, or a possible move on a chess board
  ************************************************************************/
 
 #pragma once
 
-#include <string>
 #include <cassert>
 #include <cstdint>
+#include <iosfwd>
+#include <string>
 using std::string;
 using std::ostream;
 using std::istream;
@@ -45,15 +46,9 @@ class TestBoard;
  ***************************************************/
 class Position
 {
-    friend class PositionTest;
-    friend class TestMove;
-    friend class TestBoard;
-    friend class TestBishop;
-    friend class TestQueen;
-    friend class TestKing;
-    friend class TestRook;
-    friend class TestPawn;
-    
+   friend class PositionTest;
+   friend class TestMove;
+   friend class TestBoard;
 public:
 
    // Position :    The Position class can work with other positions,
@@ -62,8 +57,8 @@ public:
    Position() : colRow(0x99)      {                               }
    bool isInvalid() const         { return (bool)(colRow & 0x88); }
    bool isValid()   const         { return !isInvalid();          }
-   void setValid()                {                               }
-   void setInvalid()              {                               }
+   void setValid()                { colRow = 0x00;                }
+   void setInvalid()              { colRow = 0xff;                }
    bool operator <  (const Position & rhs) const { return this->colRow < rhs.colRow; }
    bool operator == (const Position & rhs) const { return this->colRow == rhs.colRow; }
    bool operator != (const Position & rhs) const { return this->colRow != rhs.colRow; }
@@ -71,9 +66,9 @@ public:
    
    // Location : The Position class can work with locations, which
    //            are 0...63 where we start in row 0, then row 1, etc.
-   Position(int location) : colRow(0x99) {                                 }
-   int getLocation() const               { return getRow() * 8 + getCol(); }
-   void setLocation(int location)        {                                 }
+   Position(int location) : colRow(0x99) {                                  }
+   int getLocation() const               { return getRow() * 8 + getCol();  }
+   void setLocation(int location)        { set(location % 8, location / 8); }
 
    
    // Row/Col : The position class can work with row/column,
@@ -101,13 +96,13 @@ public:
    // Pixels:    The Position class can work with screen coordinates,
    //            a.k.a. Pixels, these are X and Y coordinates. Note that
    //            we need to scale them according to the size of the board.
-   int getX()   const { return 99; }
-   int getY()   const { return 99; }
-   void setXY(double x, double y) { }
-   double getSquareWidth()  const { return 99; }
-   double getSquareHeight() const { return 99; }
-   void setSquareWidth (double width )  {  }
-   void setSquareHeight(double height)  {  }
+   int getX()   const { return getRow() * squareWidth;           }
+   int getY()   const { return getCol() * squareHeight;          }
+   void setXY(double x, double y);
+   double getSquareWidth()  const { return squareWidth;          }
+   double getSquareHeight() const { return squareHeight;         }
+   void setSquareWidth (double width )  { squareWidth = width;   }
+   void setSquareHeight(double height)  { squareHeight = height; }
 
    // Delta:    The Position class can work with deltas, which are
    //           offsets from a given location. This helps pieces move
@@ -115,7 +110,8 @@ public:
    Position(const Position & rhs, const Delta & delta) : colRow(-1) {  }
    void adjustRow(int dRow)   { }
    void adjustCol(int dCol)   { }
-   const Position& operator += (const Delta& rhs) {
+   const Position& operator += (const Delta& rhs)
+   {
       setCol(getCol() + rhs.dCol);
       setRow(getRow() + rhs.dRow);
       return *this;
@@ -161,8 +157,8 @@ public:
    void setCol(int c)                     { assert(false);           }
    void set(int c, int r)                 { assert(false);           }
 
-   int getX()   const { assert(false); return 0; }
-   int getY()   const { assert(false); return 0; }
+   int getX() const { assert(false); return 0; }
+   int getY() const { assert(false); return 0; }
    void setXY(double x, double y) { assert(false);           }
    double getSquareWidth()  const { assert(false); return 0; }
    double getSquareHeight() const { assert(false); return 0; }

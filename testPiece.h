@@ -12,7 +12,7 @@
 #include "unitTest.h"
 
 /***************************************************
- * TEST PIECE
+ * TEST PIECE 
  * Test the PIECE base class
  ***************************************************/
 class TestPiece : public UnitTest
@@ -68,3 +68,4 @@ private:
 
 
 };
+

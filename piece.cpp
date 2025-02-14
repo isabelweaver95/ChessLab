@@ -2,19 +2,18 @@
  * Source File:
  *    PIECE
  * Author:
- *    <your name here>
+ *    Nathan Bird, Jared Davey, Brock Hoskins
  * Summary:
  *    The Piece base class and all the derived classes:
  *       SPACE, KING, QUEEN, ROOK, KNIGHT, BISHOP, PAWN
  ************************************************************************/
 
-#include "position.h"  // for POSITION
-#include "piece.h"     // for all the PIECE class definitions
-#include "pieceSpace.h"
-#include "pieceKnight.h"
 #include "board.h"     // for BOARD
-#include "uiDraw.h"    // for draw*()
-#include <cassert>     // because we are paranoid
+#include "move.h"
+#include "piece.h"     // for all the PIECE class definitions
+#include "pieceType.h"
+#include "position.h"  // for POSITION
+#include <set>
 using namespace std;
 
 
@@ -48,6 +47,11 @@ bool Piece::operator!=(PieceType pt) const
    return this->getType() != pt;
 }
 
+Move Piece::createNewMove(const Position& newPos, const Board& board) const
+{
+   return Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, fWhite);
+}
+
 void Piece::setLastMove(int currentMove)
 {
    lastMove = currentMove;
@@ -61,3 +65,4 @@ void Piece::setLastMove(int currentMove)
 void Piece::getMoves(set <Move> & movesSet, const Board & board) const
 {
 }
+

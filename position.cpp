@@ -2,7 +2,7 @@
  * Source File:
  *    POSITION
  * Author:
- *    Savanna & Isabel
+ *    Nathan Bird, Jared <lastname>, Brock Hoskins
  * Summary:
  *    The position of a piece, the cursor, or a possible move on a chess board
  ************************************************************************/
@@ -37,6 +37,12 @@ const Position& Position::operator=(const string& rhs)
    return *this;
 }
 
+void Position::setXY(double x, double y)
+{
+   double totalWidth = 8.0 * getSquareWidth() + (int)(OFFSET_BOARD * 2);
+   set((x - OFFSET_BOARD) / squareWidth, (totalWidth - y - OFFSET_BOARD) / squareHeight);
+}
+
 
 /******************************************
  * POSITION INSERTION OPERATOR
@@ -54,3 +60,4 @@ istream & operator >> (istream & in,  Position & rhs)
 {
    return in;
 }
+

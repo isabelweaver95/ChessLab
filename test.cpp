@@ -15,12 +15,10 @@
 #include "testBoard.h"
 #include "testMove.h"
 #include "testBishop.h"
-#include "testKnight.h"
-#include "testPawn.h"
 #include "testRook.h"
-#include "testQueen.h"
 #include "testKing.h"
-
+#include "testQueen.h"
+#include "testPawn.h"
 
 // This code, and the similar IF_DEF in testRunner(), is to ensure that
 // you can see the text output (called the console window) and OpenGL's
@@ -29,7 +27,6 @@
 // and your team is exclusively on Visual Studio, you can safely remove
 // these two "#ifdef _WIN32" and the "#endif" below it.
 #ifdef _WIN32
-#include <windows.h>
 #include <iostream>
 using namespace std;
 #endif
@@ -57,14 +54,13 @@ void testRunner()
    // unit tests
    PositionTest().run();
    TestMove().run();
-   TestBoard().run();
+   TestBoard().run();   // Ticket 6-7
    TestPiece().run();
    TestSpace().run();
    TestKnight().run();
-    TestBishop().run();
-    TestKnight().run();
-    TestPawn().run();
-    TestRook().run();
-    TestQueen().run();
-    TestKing().run();
+   TestBishop().run();  // ~Ticket 1~
+   TestRook().run();    // ~Ticket 2~
+   TestQueen().run();   // ~Ticket 3~
+   TestKing().run();    // ~Ticket 4~
+   TestPawn().run();    // ~Ticket 5~
 }

@@ -2,7 +2,7 @@
  * Source File:
  *    TEST ROOK
  * Author:
- *    Savanna and Isabel
+ *    Nathan Bird, Jared Davey, Brock Hoskins
  * Summary:
  *    The unit tests for the rook
  ************************************************************************/

@@ -2,7 +2,7 @@
  * Header File:
  *    TEST BOARD
  * Author:
- *    Savanna & Isabel
+ *    Savanna & Isabel 
  * Summary:
  *    The unit tests for Board
  ************************************************************************/

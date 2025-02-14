@@ -8,10 +8,10 @@
  ************************************************************************/
 
 #include "testKnight.h"
-#include "pieceKnight.h"
+#include "pieceKnight.h"     
 #include "board.h"
 #include "uiDraw.h"
-#include <cassert>
+#include <cassert>      
 
  /*************************************
   * +---a-b-c-d-e-f-g-h---+
@@ -230,7 +230,7 @@ void TestKnight::getMoves_free()
  **************************************/
 void TestKnight::getType()
 {
-   // SETUP
+   // SETUP  
    const Knight knight(7, 7, false /*white*/);
    PieceType pt = SPACE;
 

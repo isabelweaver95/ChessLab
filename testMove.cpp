@@ -578,3 +578,4 @@ void TestMove::pieceTypeFromLetter_king()
 }  // TEARDOWN
 
 
+

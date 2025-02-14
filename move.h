@@ -2,16 +2,17 @@
  * Header File:
  *    MOVE
  * Author:
- *    <your name here>
+ *    Nathan Bird, Jared Davey, Brock Hoskins
  * Summary:
  *    Everything we need to know about a single chess move
  ************************************************************************/
 
 #pragma once
 
-#include <string>
-#include "position.h"  // Every move has two Positions as attributes
 #include "pieceType.h" // A piece type
+#include "position.h"  // Every move has two Positions as attributes
+#include <set>
+#include <string>
 
 
 class TestMove;
@@ -32,7 +33,8 @@ public:
 
    // constructor
    Move();
-   Move(const Position& source, const Position dest, PieceType promote, PieceType capture, MoveType moveType, bool isWhite);
+   Move(const Position& source, const Position& dest, PieceType promote, PieceType capture, MoveType moveType, bool isWhite);
+   Move(const Position& source, const Position& dest, const std::set<Move> & possible);
    Move(const char* text, const bool& isWhite);
    Move(const char* text);
    Move(const string text, const bool& isWhite);
@@ -51,8 +53,7 @@ public:
    MoveType getMoveType() const { return moveType; }
    PieceType getCatpure() const { return capture;  }
    PieceType getPromote() const { return promote;  }
-    
-
+   
 private:
    char letterFromPieceType(PieceType pt)     const;
    PieceType pieceTypeFromLetter(char letter) const;
@@ -67,3 +68,5 @@ private:
    bool      isWhite;   // whose turn is it anyway?
    string    text;      // what is the textual version of the move?
 };
+
+

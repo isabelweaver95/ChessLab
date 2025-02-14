@@ -1,6 +1,6 @@
 /***********************************************************************
  * Header File:
- *    TEST MOVE
+ *    TEST MOVE 
  * Author:
  *    <your name here>
  * Summary
@@ -18,7 +18,7 @@
 class TestMove : public UnitTest
 {
 public:
-   void run()
+   void run() 
    {
       // Constructor
 //      constructor_default();

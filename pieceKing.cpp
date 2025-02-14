@@ -1,86 +1,89 @@
-/**
- 
- 
- 
- 
- KING
- 
- **/
+/***********************************************************************
+ * Source File:
+ *    KING
+ * Author:
+ *    Nathan Bird, Brock Hoskins, Jared Davey
+ * Summary:
+ *    The King class
+ ************************************************************************/
 
-#include "pieceKing.h"
 #include "board.h"
+#include "move.h"
+#include "piece.h"
+#include "pieceKing.h"
+#include "pieceType.h"
+#include "position.h"
 #include "uiDraw.h"
-#include <iostream>
+#include <cassert>
+#include <set>
 
-/***************************************************
-* PIECE DRAW
-* Draw all the pieces.
-***************************************************/
-void King::display(ogstream* pgout) const
-{
-  pgout->drawKing(position, fWhite);
-}
-
-
-
-void King::getMoves(set<Move>& moves, const Board& board) const
+ /**********************************************
+  * KING : GET POSITIONS
+  *********************************************/
+void King::getMoves(set<Move>& possible, const Board& board) const
 {
    int row = position.getRow();
    int col = position.getCol();
-   Relative possible[8] =
+   RelativePos moves[8] =
    {
-      {-1,  1},
-       {0,  1},
-       {1,  1},
-      {-1,  0},
-       {1,  0},
-      {-1, -1},
-       {0, -1},
-       {1, -1}
+      {-1,  1}, {0,  1}, {1,  1},
+      {-1,  0},          {1,  0},
+      {-1, -1}, {0, -1}, {1, -1}
    };
-    
-    
    int r, c;
    for (int i = 0; i < 8; i++)
    {
-       r = row + possible[i].row;
-      c = col + possible[i].col;
+      r = row + moves[i].row;
+      c = col + moves[i].col;
       Position newPos(c, r);
 
       if (newPos.isValid() && (fWhite != board[newPos].isWhite() || board[newPos].getType() == SPACE))
-          moves.insert(Move(position, newPos, PieceType::INVALID, board[newPos].getType(), Move::MoveType::MOVE, isWhite()));
+         possible.insert(createNewMove(newPos, board));
    }
 
    // King-side Castle
    Position ksRookPos(col + 3, row);
    Position ksCastleMovePos(col + 2, row);
    Position rightOfKingPos(col + 1, row);
-    
-    
-   if (nMoves == 0 &&
-       ksRookPos.isValid() &&
-       ksCastleMovePos.isValid() &&
-       rightOfKingPos.isValid() &&
-       board[ksRookPos].getType() == PieceType::ROOK &&
-       board[ksRookPos].getNMoves() == 0 &&
-       board[rightOfKingPos].getType() == PieceType::SPACE &&
-       board[ksCastleMovePos].getType() == PieceType::SPACE)
-       moves.insert(Move(position, ksCastleMovePos, PieceType::INVALID, board[ksCastleMovePos].getType(), Move::MoveType::CASTLE_KING, isWhite()));
+   if (nMoves == 0 &&  // King hasn't moved
+       ksRookPos.isValid() &&        // Three spaces
+       ksCastleMovePos.isValid() &&  // right of king
+       rightOfKingPos.isValid() &&   // are valid.
+       board[ksRookPos].getType() == PieceType::ROOK &&  // Piece in King-side rook starting spot is rook.
+       board[ksRookPos].getNMoves() == 0 &&              // King-side rook hasn't moved.
+       board[rightOfKingPos].getType() == PieceType::SPACE &&  // Pieces between king
+       board[ksCastleMovePos].getType() == PieceType::SPACE)   // and rook are spaces.
+      possible.insert(createCastleMove(ksCastleMovePos, Move::MoveType::CASTLE_KING));
 
    // Queen-side Castle
    Position qsRookPos(col - 4, row);
    Position rightOfRookPos(col - 3, row);
    Position qsCastleMovePos(col - 2, row);
    Position leftOfKingPos(col - 1, row);
-   
-    if (nMoves == 0 &&
-       qsRookPos.isValid() &&
-       qsCastleMovePos.isValid() &&
-       board[qsRookPos].getType() == PieceType::ROOK &&
-       board[qsRookPos].getNMoves() == 0 &&
-       board[leftOfKingPos].getType() == PieceType::SPACE &&
-       board[qsCastleMovePos].getType() == PieceType::SPACE &&
-       board[rightOfRookPos].getType() == PieceType::SPACE)
-       moves.insert(Move(position, qsCastleMovePos, PieceType::INVALID, board[qsCastleMovePos].getType(), Move::MoveType::CASTLE_QUEEN, isWhite()));
+   if (nMoves == 0 &&  // King hasn't moved
+       qsRookPos.isValid() &&        // Four spaces
+       rightOfRookPos.isValid() &&   // left of
+       qsCastleMovePos.isValid() &&  // king are
+       leftOfKingPos.isValid() &&    // valid.
+       board[qsRookPos].getType() == PieceType::ROOK &&  // Piece in Queen-side rook starting spot is rook.
+       board[qsRookPos].getNMoves() == 0 &&              // Queen-side rook hasn't moved.
+       board[leftOfKingPos].getType() == PieceType::SPACE &&    // Empty spaces
+       board[qsCastleMovePos].getType() == PieceType::SPACE &&  // between king
+       board[rightOfRookPos].getType() == PieceType::SPACE)     // and rook.
+      possible.insert(createCastleMove(qsCastleMovePos, Move::MoveType::CASTLE_QUEEN));
+}
 
+/***************************************************
+ * KING : DRAW
+ * Draw the king.
+ ***************************************************/
+void King::display(ogstream* pgout) const
+{
+   pgout->drawKing(position, !fWhite);
+}
+
+Move King::createCastleMove(const Position& newPos, Move::MoveType castleType) const
+{
+   assert(castleType == Move::MoveType::CASTLE_KING || castleType == Move::MoveType::CASTLE_QUEEN);
+   return Move(position, newPos, PieceType::INVALID, PieceType::SPACE, castleType, fWhite);
 }

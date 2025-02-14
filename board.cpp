@@ -2,7 +2,7 @@
  * Source File:
  *    BOARD
  * Author:
- *     Savanna and Isabel
+ *    Nathan Bird, Jared Davey, Brock Hoskins
  * Summary:
  *    A collection of pieces and the state of the board
  ************************************************************************/
@@ -20,8 +20,8 @@
 #include "pieceType.h"
 #include "position.h"
 #include "uiDraw.h"
+#include <set>
 #include <utility>
-#include <iostream>
 using namespace std;
 
 
@@ -92,8 +92,10 @@ Piece& Board::operator [] (const Position& pos)
 * BOARD : DISPLAY
 *         Display the board
 ***********************************************/
-void Board::display(const Position& posHover, const Position& posSelect) const
+void Board::display(const Position& posHover, const Position& posSelect, const set<Move>& possible) const
 {
+   ogstream gout;
+
    // draw the checkerboard
    pgout->drawBoard();
 
@@ -101,10 +103,10 @@ void Board::display(const Position& posHover, const Position& posSelect) const
    pgout->drawHover(posHover);
    pgout->drawSelected(posSelect);
 
-   //// draw the possible moves
-   //set <int> ::iterator it;
-   //for (it = possible.begin(); it != possible.end(); ++it)
-   //   gout.drawPossible(*it);
+   // draw the possible moves
+   set <Move> ::iterator it;
+   for (it = possible.begin(); it != possible.end(); ++it)
+      gout.drawPossible(it->getDest());
 
    // draw the pieces
    for (const auto& row : board)
@@ -173,29 +175,41 @@ void Board::move(const Move& move)
    // En Passant
    if (move.getMoveType() == Move::MoveType::ENPASSANT)
    {
-      board[dest.getCol()][dest.getRow() - 1] = new Space(dest.getCol(), dest.getRow());
+      if (move.getIsWhite())
+         board[dest.getCol()][dest.getRow() - 1] = new Space(dest.getCol(), dest.getRow());
+      else
+         board[dest.getCol()][dest.getRow() + 1] = new Space(dest.getCol(), dest.getRow());
    }
 
    // Pawn promition
    if ((board[source.getCol()][source.getRow()]->getType() == PieceType::PAWN) &&
        (dest.getRow() == 0 || dest.getRow() == 7))
    {
-      board[source.getCol()][source.getRow()] = new Queen(source.getCol(), source.getRow());
+      board[source.getCol()][source.getRow()] = new Queen(source.getCol(), source.getRow(), move.getIsWhite());
    }
 
    // King-side Castle
    if ((board[source.getCol()][source.getRow()]->getType() == PieceType::KING) &&
        (move.getMoveType() == Move::MoveType::CASTLE_KING))
+   {
+      // change rook position
       std::swap(board[source.getCol() + 3][source.getRow()], board[source.getCol() + 1][source.getRow()]);
+      board[source.getCol() + 1][source.getRow()]->setPosition(Position(source.getCol() + 1, source.getRow()));
+   }
 
    // Queen-side Castle
    if ((board[source.getCol()][source.getRow()]->getType() == PieceType::KING) &&
          (move.getMoveType() == Move::MoveType::CASTLE_QUEEN))
+   {
+      // change rook position
       std::swap(board[source.getCol() - 4][source.getRow()], board[source.getCol() - 1][source.getRow()]);
+      board[source.getCol() - 1][source.getRow()]->setPosition(Position(source.getCol() - 1, source.getRow()));
+   }
 
-
-
+   // change source piece position
    std::swap(board[source.getCol()][source.getRow()], board[dest.getCol()][dest.getRow()]);
+   board[dest.getCol()][dest.getRow()]->setPosition(dest);
+
 }
 
 /**********************************************

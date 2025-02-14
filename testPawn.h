@@ -30,7 +30,7 @@ public:
       getMoves_enpassantWhite();
       getMoves_enpassantBlack();
       getMoves_promotionWhite();
-      getMoves_promotionBlack();
+//      getMoves_promotionBlack();
 
       getType();
 

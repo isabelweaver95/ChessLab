@@ -88,9 +88,9 @@ public:
 private:
    void initialize(const char* title);
 
-   static bool         initialized;  // only run the constructor once!
-   static double       timePeriod;   // interval between frame draws
-   static unsigned long nextTick;     // time (from clock()) of our next draw
+   static bool         initialized;    // only run the constructor once!
+   static double       timePeriod;     // interval between frame draws
+   static unsigned long nextTick;      // time (from clock()) of our next draw
 
    static Position  posHover;          // mouse hover position in chess coordinates
    static Position  posSelect;         // mouse clicked position in chess coordinates
