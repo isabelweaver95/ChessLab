@@ -2,7 +2,7 @@
  * Source File:
  *    TEST PAWN
  * Author:
- *    <your name here>
+ *    Isabel and Savanna
  * Summary:
  *    The unit tests for the pawn
  ************************************************************************/
@@ -157,7 +157,7 @@ void TestPawn::getMoves_initialAdvanceBlack()
 {
     // SETUP
     BoardEmpty board;
-    Pawn pawn(7, 7, false /*fWhite*/);
+    Pawn pawn(7, 7, false);
     pawn.position.set(2, 6);
     pawn.fWhite = false;
     pawn.nMoves = 0;
@@ -305,7 +305,7 @@ void TestPawn::getMoves_enpassantWhite()
 {
     // SETUP
     BoardEmpty board;
-    Pawn pawn(7, 7, false /*fWhite*/);
+    Pawn pawn(7, 7, false );
     pawn.position.set(1, 4);
     pawn.fWhite = true;
     pawn.nMoves = 1;
@@ -358,7 +358,7 @@ void TestPawn::getMoves_enpassantBlack()
 {
     // SETUP
     BoardEmpty board;
-    Pawn pawn(7, 7, false /*fWhite*/);
+    Pawn pawn(7, 7, false );
     pawn.position.set(5, 3);
     pawn.fWhite = false;
     pawn.nMoves = 1;
@@ -413,7 +413,7 @@ void TestPawn::getMoves_promotionWhite()
 {
     // SETUP
     BoardEmpty board;
-    Pawn whitePawn(7, 7, false /*fWhite*/);
+    Pawn whitePawn(7, 7, false );
     whitePawn.fWhite = true;
     whitePawn.position.set(1, 6);
        
@@ -500,5 +500,17 @@ void TestPawn::getMoves_promotionBlack()
  **************************************/
 void TestPawn::getType()
 {
-   assertUnit(NOT_YET_IMPLEMENTED);
-}
+    // SETUP
+    Pawn pawn(7, 7, false);
+    pawn.fWhite = true;
+    pawn.position.set(3, 4);
+
+    // EXERCISE
+    PieceType pt = pawn.getType();
+
+    // VERIFY
+    assertUnit(pt == PieceType::PAWN);
+    assertUnit(pawn.fWhite == true);
+    assertUnit(pawn.position.getCol() == 3);
+    assertUnit(pawn.position.getRow() == 4);
+ }  // TEARDOWN

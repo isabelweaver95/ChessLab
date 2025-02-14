@@ -2,7 +2,7 @@
  * Source File:
  *    TEST KNIGHT
  * Author:
- *    <your name here>
+ *    Isabel and Savanna
  * Summary:
  *    The unit tests for the knight
  ************************************************************************/
@@ -31,7 +31,7 @@ void TestKnight::getMoves_end()
 {
    // SETUP
    BoardEmpty board;
-   Knight knight(7, 7, false /*white*/);
+   Knight knight(7, 7, false );
    knight.fWhite = true;
    knight.position.set(6, 0);
    board.board[6][0] = &knight;
@@ -41,13 +41,13 @@ void TestKnight::getMoves_end()
    board.board[5][2] = &white;
    set <Move> moves;
 
-//   // EXERCISE
-//   knight.getMoves(moves, board);
-//
-//   // VERIFY
-//   assertUnit(moves.size() == 2);  // many possible moves
-//   assertUnit(moves.find(Move("g1e2p")) != moves.end());
-//   assertUnit(moves.find(Move("g1h3")) != moves.end());
+   // EXERCISE
+   knight.getMoves(moves, board);
+
+   // VERIFY
+   assertUnit(moves.size() == 2);  // many possible moves
+   assertUnit(moves.find(Move("g1e2p")) != moves.end());
+   assertUnit(moves.find(Move("g1h3")) != moves.end());
 
    // TEARDOWN
    board.board[6][0] = nullptr; // white knight

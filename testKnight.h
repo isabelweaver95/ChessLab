@@ -2,7 +2,7 @@
  * Header File:
  *    TEST KNIGHT
  * Author:
- *    <your name here>
+ *    Isabel and Savanna
  * Summary:
  *    The unit tests for Knight
  ************************************************************************/

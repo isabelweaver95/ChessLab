@@ -2,7 +2,7 @@
  * Source File:
  *    TEST KING
  * Author:
- *    Nathan Bird, Jared Davey, Brock Hoskins
+ *    Savanna and Isabel
  * Summary:
  *    The unit tests for the King
  ************************************************************************/
@@ -35,7 +35,7 @@ void TestKing::getMoves_blocked()
 {
    // SETUP
    BoardEmpty board;
-   King king(7, 7, true /*fWhite*/);
+   King king(7, 7, true);
    king.fWhite = false;  // black
    king.position.set(3, 4);
    board.board[3][4] = &king;
@@ -93,7 +93,7 @@ void TestKing::getMoves_capture()
 {
    // SETUP
    BoardEmpty board;
-   King king(7, 7, true /*fWhite*/);
+   King king(7, 7, true );
    king.fWhite = false;  // black
    king.position.set(3, 4);
    board.board[3][4] = &king;
@@ -160,7 +160,7 @@ void TestKing::getMoves_free()
 {
    // SETUP
    BoardEmpty board;
-   King king(7, 7, true /*fWhite*/);
+   King king(7, 7, true );
    king.fWhite = false;  // black
    king.position.set(3, 4);
    board.board[3][4] = &king;
@@ -203,7 +203,7 @@ void TestKing::getMoves_end()
 {
    // SETUP
    BoardEmpty board;
-   King king(7, 7, true /*fWhite*/);
+   King king(7, 7, true );
    king.position.set(0, 0);
    board.board[0][0] = &king;
    set<Move> moves;
@@ -240,7 +240,7 @@ void TestKing::getMoves_whiteCastle()
 {
    // SETUP
    BoardEmpty board;
-   King king(7, 7, false /*fWhite*/);
+   King king(7, 7, false );
    king.fWhite = true;
    king.position.set(4, 0);
    board.board[4][0] = &king;
@@ -294,7 +294,7 @@ void TestKing::getMoves_blackCastle()
 {
    // SETUP
    BoardEmpty board;
-   King king(7, 7, false /*fWhite*/);
+   King king(7, 7, false );
    king.fWhite = false;  // black
    king.position.set(4, 7);
    Black pawn1(PAWN);
@@ -347,7 +347,7 @@ void TestKing::getMoves_whiteCastleKingMoved()
 {
    // SETUP
    BoardEmpty board;
-   King king(7, 7, false /*fWhite*/);
+   King king(7, 7, false );
    king.fWhite = true;
    king.position.set(4, 0);
    king.nMoves = 1;
@@ -400,7 +400,7 @@ void TestKing::getMoves_whiteCastleRookMoved()
 {
    // SETUP
    BoardEmpty board;
-   King king(7, 7, false /*fWhite*/);
+   King king(7, 7, false );
    king.fWhite = true;
    king.position.set(4, 0);
    board.board[4][0] = &king;
@@ -441,7 +441,7 @@ void TestKing::getMoves_whiteCastleRookMoved()
 void TestKing::getType()
 {
    // SETUP
-   King king(7, 7, true /*fWhite*/);
+   King king(7, 7, true );
    king.fWhite = false;
    king.position.set(0, 0);
    PieceType pt;

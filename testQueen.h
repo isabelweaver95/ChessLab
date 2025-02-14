@@ -2,7 +2,7 @@
  * Header File:
  *    QUEEN TEST
  * Author:
- *    Nathan Bird, Jared Davey, Brock Hoskins
+ *    Isabel and Savanna
  * Summary:
  *    The unit tests for the Queen
  ************************************************************************/

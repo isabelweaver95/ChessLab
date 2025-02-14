@@ -2,7 +2,7 @@
  * Header File:
  *    TEST KING
  * Author:
- *    Nathan Bird, Jared Davey, Brock Hoskins
+ *    Isabel and Savanna
  * Summary:
  *    The unit tests for King
  ************************************************************************/
@@ -10,8 +10,6 @@
 #pragma once
 
 #include "unitTest.h"
-
-
 
 
 /***************************************************

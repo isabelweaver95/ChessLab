@@ -2,7 +2,7 @@
  * Header File:
  *    Queen
  * Author:
- *    Nathan Bird, Brock Hoskins, Jared Davey
+ *    Isabel and Savanna
  * Summary:
  *    The Queen class
  ************************************************************************/

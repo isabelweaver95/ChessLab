@@ -2,7 +2,7 @@
  * Source File:
  *    TEST ROOK
  * Author:
- *    Nathan Bird, Jared Davey, Brock Hoskins
+ *    Isabel and Savanna
  * Summary:
  *    The unit tests for the rook
  ************************************************************************/
@@ -35,7 +35,7 @@ void TestRook::getMoves_blocked()
 {
        // SETUP
    BoardEmpty board;
-   Rook rook(7, 7, true /*fWhite*/);
+   Rook rook(7, 7, true );
    rook.fWhite = false;  // black
    rook.position.set(2, 1);
    board.board[2][1] = &rook;
@@ -82,7 +82,7 @@ void TestRook::getMoves_slideToEnd()
 {
           // SETUP
    BoardEmpty board;
-   Rook rook(7, 7, true /*fWhite*/);
+   Rook rook(7, 7, true );
    rook.fWhite = false;  // black
    rook.position.set(2, 1);
    board.board[2][1] = &rook;
@@ -131,7 +131,7 @@ void TestRook::getMoves_slideToBlock()
 {
    // SETUP
    BoardEmpty board;
-   Rook rook(7, 7, true /*fWhite*/);
+   Rook rook(7, 7, true );
    rook.fWhite = false;  // black
    rook.position.set(2, 1);
    board.board[2][1] = &rook;
@@ -187,7 +187,7 @@ void TestRook::getMoves_slideToCapture()
 {
    // SETUP
    BoardEmpty board;
-   Rook rook(7, 7, true /*fWhite*/);
+   Rook rook(7, 7, true );
    rook.fWhite = true;  // black
    rook.position.set(2, 1);
    board.board[2][1] = &rook;

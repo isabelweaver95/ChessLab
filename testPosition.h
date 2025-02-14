@@ -2,7 +2,7 @@
  * Header File:
  *    TEST POSITION
  * Author:
- *    <your name here>
+ *    Isabel And Savanna
  * Summary:
  *    The unit tests for Position
  ************************************************************************/

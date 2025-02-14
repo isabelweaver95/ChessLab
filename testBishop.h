@@ -2,14 +2,12 @@
  * Header File:
  *    TEST BISHOP
  * Author:
- *    Nathan Bird, Jared Davey, Brock Hoskins
+ *    Isabel and Savanna
  * Summary:
  *    The unit tests for the bishop
  ************************************************************************/
 
 #pragma once
-
-
 #include "unitTest.h"
 
 /***************************************************

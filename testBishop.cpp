@@ -2,7 +2,7 @@
  * Source File:
  *    TEST BISHOP
  * Author:
- *    Nathan Bird, Jared Davey, Brock Hoskins
+ *    Savanna and Isabel
  * Summary:
  *    The unit tests for a bishop
  ************************************************************************/
@@ -13,8 +13,6 @@
 #include "board.h"
 #include "uiDraw.h"
 #include <cassert>
-
-
 
 
 /*************************************
@@ -35,7 +33,7 @@ void TestBishop::getMoves_blocked()
 {
     // SETUP
    BoardEmpty board;
-   Bishop bishop(7, 7, true /*fWhite*/);
+   Bishop bishop(7, 7, true );
    bishop.fWhite = false;  // black
    bishop.position.set(2, 1);
    board.board[2][1] = &bishop;
@@ -81,7 +79,7 @@ void TestBishop::getMoves_slideToEnd()
 {
    // SETUP
    BoardEmpty board;
-   Bishop bishop(7, 7, true /*fWhite*/);
+   Bishop bishop(7, 7, true );
    bishop.fWhite = false;  // black
    bishop.position.set(2, 1);
    board.board[2][1] = &bishop;
@@ -125,7 +123,7 @@ void TestBishop::getMoves_slideToBlock()
 {
    // SETUP
    BoardEmpty board;
-   Bishop bishop(7, 7, true /*fWhite*/);
+   Bishop bishop(7, 7, true );
    bishop.fWhite = false;  // black
    bishop.position.set(2, 1);
    board.board[2][1] = &bishop;
@@ -177,7 +175,7 @@ void TestBishop::getMoves_slideToCapture()
 {
    // SETUP
    BoardEmpty board;
-   Bishop bishop(7, 7, false /*isWhite*/);
+   Bishop bishop(7, 7, false );
    bishop.fWhite = true;
    bishop.position.set(2, 1);
    board.board[2][1] = &bishop;
@@ -223,7 +221,7 @@ void TestBishop::getMoves_slideToCapture()
 void TestBishop::getType()
 {
    // SETUP
-   Bishop bishop(7, 7, false /*isWhite*/);
+   Bishop bishop(7, 7, false );
    bishop.fWhite = true;
    bishop.position.set(3, 4);
 
